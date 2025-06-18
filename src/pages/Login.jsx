@@ -26,7 +26,7 @@ const Login = () => {
     const credentials = { email, password };
     const userData = await loginUser(credentials);
 
-    console.log('🔓 Login Response:', userData);
+    // console.log('🔓 Login Response:', userData);
     sessionStorage.setItem('user', JSON.stringify(userData));
     toast.success('Login successful!');
     navigate('/dashboard');
