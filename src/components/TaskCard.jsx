@@ -45,7 +45,7 @@ const TaskCard = ({ task, onUpdate, onDelete }) => {
   return (
     <>
       <Grid item size={{ xs: 12, md: 4 }}>
-        <Card sx={{ mb: 2 }}>
+        <Card sx={{ mb: 2,boxShadow: 3, borderRadius: 2 }}>
           <CardContent>
             <div className="flex justify-between items-start gap-4">
               {/* Task Info */}

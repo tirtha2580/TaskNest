@@ -212,7 +212,7 @@ const TaskOverviewMain = () => {
           <Grid container spacing={2}>
             {filteredTasks.map((task) => (
               <Grid item size={{ xs: 12, md: 6 }} key={task._id}>
-                <Card variant="outlined">
+                <Card sx={{ boxShadow: 3, borderRadius: 2 }}  variant="outlined">
                   <CardContent>
                     <div className="flex justify-between items-start">
                       <div>

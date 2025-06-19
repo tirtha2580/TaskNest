@@ -146,7 +146,7 @@ const AddTask = () => {
                 onChange={handleChange}
                 sx={{ mb: 3 }}
               />
-              <TextField
+              {/* <TextField
                 select
                 label="Completed"
                 name="completed"
@@ -157,7 +157,7 @@ const AddTask = () => {
               >
                 <MenuItem value="No">No</MenuItem>
                 <MenuItem value="Yes">Yes</MenuItem>
-              </TextField>
+              </TextField> */}
 
               <Button
                 type="submit"
