@@ -8,13 +8,18 @@ import {
   Avatar,
   Typography,
   Box,
+  IconButton,
+  Divider,
+  useMediaQuery,
 } from '@mui/material';
-import { Home, Schedule, CheckCircle } from '@mui/icons-material';
+import { Home, Schedule, CheckCircle, Menu } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useMediaQuery('(max-width:768px)');
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [username, setUsername] = useState('Guest');
   const [firstLetter, setFirstLetter] = useState('G');
@@ -42,22 +47,8 @@ const Sidebar = () => {
     { text: 'Completed Tasks', icon: <CheckCircle />, path: '/completed' },
   ];
 
-  return (
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      sx={{
-        width: 240,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: 240,
-          boxSizing: 'border-box',
-          background: 'linear-gradient(to bottom right, #fdf6e3, #e0f7fa, #fce4ec)', // Light pastel gradient
-          color: '#333',
-          borderRight: '1px solid #ddd',
-        },
-      }}
-    >
+  const drawerContent = (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Box
         sx={{
           display: 'flex',
@@ -82,7 +73,7 @@ const Sidebar = () => {
           {username}
         </Typography>
       </Box>
-
+      <Divider />
       <List>
         {navItems.map(({ text, icon, path }) => {
           const isActive = location.pathname === path;
@@ -90,12 +81,13 @@ const Sidebar = () => {
             <ListItem
               button
               key={text}
-              onClick={() => navigate(path)}
+              onClick={() => {
+                navigate(path);
+                if (isMobile) setMobileOpen(false); // close on mobile
+              }}
               sx={{
-                cursor: 'pointer',
                 backgroundColor: isActive ? '#ffebee' : 'transparent',
                 color: isActive ? '#c62828' : '#37474f',
-                fontWeight: isActive ? 'bold' : 'normal',
                 '&:hover': {
                   backgroundColor: '#f0f4c3',
                   color: '#4e342e',
@@ -105,7 +97,6 @@ const Sidebar = () => {
               <ListItemIcon
                 sx={{
                   color: isActive ? '#c62828' : '#607d8b',
-                  minWidth: 40,
                 }}
               >
                 {icon}
@@ -115,7 +106,63 @@ const Sidebar = () => {
           );
         })}
       </List>
-    </Drawer>
+    </Box>
+  );
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <IconButton
+          onClick={() => setMobileOpen(true)}
+          sx={{
+            position: 'fixed',
+            top: 16,
+            left: 16,
+            zIndex: 1300,
+            bgcolor: 'white',
+            boxShadow: 5,
+            
+          }}
+        >
+          <Menu />
+        </IconButton>
+      )}
+
+      {/* Mobile Drawer */}
+      {isMobile ? (
+        <Drawer
+          anchor="left"
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: 240,
+              background: 'linear-gradient(to bottom right, #fdf6e3, #e0f7fa, #fce4ec)',
+            },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
+      ) : (
+        // Desktop Permanent Drawer
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: 240,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: 240,
+              background: 'linear-gradient(to bottom right, #fdf6e3, #e0f7fa, #fce4ec)',
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
+      )}
+    </>
   );
 };
 

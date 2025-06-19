@@ -9,16 +9,17 @@ import {
   Paper,
   Breadcrumbs,
   Link as MuiLink,
+  useMediaQuery,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { createTask } from '../api/taskApi';
-
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 
 const AddTask = () => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:768px)');
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
@@ -48,55 +49,48 @@ const AddTask = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f9fafb' }}>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, minHeight: '100vh', bgcolor: '#f9fafb' }}>
+      
       {/* Sidebar */}
-      <Box sx={{ width: '240px', bgcolor: '#1f2937', color: 'white' }}>
-        <Sidebar />
-      </Box>
+      {!isMobile && (
+        <Box sx={{ width: 240, flexShrink: 0 }}>
+          <Sidebar />
+        </Box>
+      )}
 
-      {/* Main Content Area */}
-      <Box sx={{ flexGrow: 1}}>
+      {/* Main Content */}
+      <Box sx={{ flexGrow: 1 }}>
         <Navbar />
 
-        {/* Breadcrumbs */}
-        <Box sx={{ padding: 2, bgcolor: '#f3f4f6' }}>
+        {/* Breadcrumb */}
+        <Box sx={{ px: { xs: 2, md: 4 }, py: 2, bgcolor: '#f3f4f6' }}>
           <Breadcrumbs aria-label="breadcrumb">
-            <MuiLink
-              component={Link}
-              underline="hover"
-              color="inherit"
-              to="/dashboard"
-            >
+            <MuiLink component={Link} underline="hover" color="inherit" to="/dashboard">
               Dashboard
             </MuiLink>
             <Typography color="text.primary">Add Task</Typography>
           </Breadcrumbs>
         </Box>
 
-        {/* Form Section */}
+        {/* Form */}
         <Box
           sx={{
             maxWidth: 800,
             mx: 'auto',
-            mt: 4,
-            px: 3,
+            mt: { xs: 3, md: 5 },
+            px: { xs: 2, sm: 3, md: 0 },
           }}
         >
           <Paper
             elevation={4}
             sx={{
-              p: 5,
+              p: { xs: 3, sm: 5 },
               borderRadius: 4,
               background: 'white',
               boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
             }}
           >
-            <Typography
-              variant="h4"
-              align="center"
-              fontWeight="600"
-              sx={{ color: '#1f2937', mb: 3 }}
-            >
+            <Typography variant="h4" align="center" fontWeight="600" sx={{ color: '#1f2937', mb: 3 }}>
               📝 Add New Task
             </Typography>
 
@@ -144,20 +138,8 @@ const AddTask = () => {
                 InputLabelProps={{ shrink: true }}
                 value={formData.dueDate}
                 onChange={handleChange}
-                sx={{ mb: 3 }}
-              />
-              {/* <TextField
-                select
-                label="Completed"
-                name="completed"
-                fullWidth
-                value={formData.completed}
-                onChange={handleChange}
                 sx={{ mb: 4 }}
-              >
-                <MenuItem value="No">No</MenuItem>
-                <MenuItem value="Yes">Yes</MenuItem>
-              </TextField> */}
+              />
 
               <Button
                 type="submit"
